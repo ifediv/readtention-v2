@@ -62,15 +62,35 @@ Message:
   return new Response(JSON.stringify({ error: 'Failed to insert insights' }), { status: 500 });
     }
 
+  // Get book title from Supabase
+  const { data: bookData, error: bookError } = await supabase
+    .from('books')
+    .select('title')
+    .eq('id', book_id)
+    .single();
+
+  if (bookError || !bookData) {
+    console.error('Failed to fetch book title:', bookError);
+    return new Response(JSON.stringify({ error: 'Book not found' }), { status: 404 });
+  }
+
+  const bookTitle = bookData.title;
+
+
   // Step 3: Ask follow-up
   const followupPrompt = `
-Given this message:
-"${message}"
+  You are a Socratic AI assistant helping a user reflect on what they’ve learned from a book they’re reading.
 
-And these extracted insights:
-${JSON.stringify(insights)}
+  Book: "${bookTitle}"
+  User message: "${message}"
+  Extracted insights: ${JSON.stringify(insights)}
 
-What is the next best follow-up question to ask the user to deepen their reflection? Only return the question text.
+  Craft a thoughtful follow-up question that either:
+  - encourages deeper self-reflection
+  - ties the book’s idea to the user’s life
+  - or prompts application of the concept
+
+  Only respond with a **single, clear, natural-sounding question** — no preamble.
   `;
 
   const followupRes = await fetch('https://api.openai.com/v1/chat/completions', {

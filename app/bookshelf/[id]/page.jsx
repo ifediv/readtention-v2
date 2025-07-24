@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { supabase } from '../../utils/supabaseClient';
+import { useParams } from 'next/navigation';
+import { supabase } from '../../../utils/supabaseClient';
 
 export default function BookshelfPage() {
+  const { id: bookId } = useParams();
+  
   const [mode, setMode] = useState('socratic');
-  const bookId = 'book-1';
+
 
   const [themes, setThemes] = useState('');
   const [quotes, setQuotes] = useState('');
@@ -92,49 +95,163 @@ export default function BookshelfPage() {
   );
 }
 
-// SocraticChat remains unchanged
+// SocraticChat 
 function SocraticChat({ bookId }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const chatEndRef = useRef(null);
+  const [stage, setStage] = useState('central');
+
+
+  useEffect(() => {
+    const loadMessages = async () => {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('book_id', bookId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching messages:', error);
+      } else {
+        if (data.length > 0) {
+        setMessages(data);
+      } else {
+        const welcome = {
+          role: 'ai',
+          content: `👋 Welcome! I see you're reading this book. Let's build your mind map together.\n\nTo start: What's the central idea or core thesis of this book?`
+        };
+        setMessages([welcome]);
+        setStage('central')
+
+        await supabase.from('messages').insert([{ ...welcome, book_id: bookId }]);
+      }
+    }
+  };
+  loadMessages();
+}, [bookId]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+  const getFollowUpPrompt = (currentStage) => {
+    switch (currentStage) {
+      case 'central':
+        return "Great start! Now let’s go one level deeper.\n\nStep 2️⃣: What are the *main branches* of ideas that support this central theme?";
+      case 'branches':
+        return "Awesome! Let's explore further.\n\nStep 3️⃣: For each main branch, what are some *supporting sub-branches* or specific examples?";
+      case 'subbranches':
+        return "✅ You’ve outlined a complete mind map! You can refine it further or move to Markmap.";
+      default:
+        return "Anything else you'd like to add?";
+    }
+  };
 
-    const { data: insertedMessages, error } = await supabase
+  const getNextStage = (currentStage) => {
+  switch (currentStage) {
+    case 'central':
+      return 'branches';
+    case 'branches':
+      return 'subbranches';
+    case 'subbranches':
+      return 'subbranches'; // stays here unless you build extra stages
+    default:
+      return currentStage;
+  }
+};
+
+const sendMessage = async () => {
+  if (!input.trim()) return;
+
+  const userMsg = {
+    book_id: bookId,
+    role: 'user',
+    content: input
+  };
+
+  const { data: insertedMessages, error } = await supabase
+    .from('messages')
+    .insert([userMsg])
+    .select();
+
+  if (error) {
+    console.error('Insert error:', error);
+    return;
+  }
+
+  setMessages(prev => [...prev, userMsg]);
+  setInput('');
+
+  const res = await fetch('/api/reflect', {
+    method: 'POST',
+    body: JSON.stringify({
+      message: input,
+      book_id: bookId,
+      message_id: insertedMessages[0].id
+    })
+  });
+
+  const { ai_response } = await res.json();
+
+  const reflectionMsg = {
+    book_id: bookId,
+    role: 'ai',
+    content: ai_response
+  };
+
+  await supabase.from('messages').insert([reflectionMsg]);
+  setMessages(prev => [...prev, reflectionMsg]);
+
+  // 🔁 Now follow up with next prompt
+  const followUp = getFollowUpPrompt(stage);
+  const promptMsg = {
+    book_id: bookId,
+    role: 'ai',
+    content: followUp
+  };
+
+  await supabase.from('messages').insert([promptMsg]);
+  setMessages(prev => [...prev, promptMsg]);
+  };
+  const handleStartOver = async () => {
+    const confirmed = confirm(
+      'Are you sure you want to start over? This will delete all your previous messages.'
+    );
+    if (!confirmed) return;
+
+    const { error } = await supabase
       .from('messages')
-      .insert([{ book_id: bookId, role: 'user', content: input }])
-      .select();
+      .delete()
+      .eq('book_id', bookId);
 
     if (error) {
-      console.error('Insert error:', error);
-      return;
-    }
+      console.error('❌ Failed to delete messages:', error.message);
+    } else {
+    // Reset to welcome state
+    const welcome = {
+      role: 'ai',
+      content: `🔁 Let's start fresh!\n\nWhat's the central idea or core thesis of this book?`,
+      book_id: bookId
+    };
 
-    const message = insertedMessages?.[0];
-    setMessages(prev => [...prev, { role: 'user', content: input }]);
-    setInput('');
-
-    const res = await fetch('/api/reflect', {
-      method: 'POST',
-      body: JSON.stringify({
-        message: input,
-        book_id: bookId,
-        message_id: message.id
-      })
-    });
-
-    const { ai_response } = await res.json();
-    setMessages(prev => [...prev, { role: 'ai', content: ai_response }]);
-  };
+    await supabase.from('messages').insert([welcome]);
+    setMessages([welcome]);
+    setStage('central');
+  }
+};
 
   return (
     <div className="flex flex-col gap-3 bg-gray-50 p-4 rounded-md shadow-inner max-h-[400px] overflow-y-auto">
-      <h3 className="text-sm text-gray-500 mb-1">Socratic Assistant</h3>
+      <div className="flex justify-between items-center mb-1">
+        <h3 className="text-sm text-gray-500">Socratic Assistant</h3>
+        <button
+          onClick={handleStartOver}
+          className="text-xs text-red-500 hover:underline"
+        >
+          🗑️ Start Over
+        </button>
+      </div>
 
       {messages.map((msg, i) => (
         <div

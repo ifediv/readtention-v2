@@ -1,30 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/utils/supabaseClient';
 
 export default function MyBooksPage() {
-  const [books, setBooks] = useState([
-    { title: 'Atomic Habits', author: 'James Clear', ideas: 15 },
-    { title: 'Deep Work', author: 'Cal Newport', ideas: 10 },
-    { title: 'The War of Art', author: 'Steven Pressfield', ideas: 8 }
-  ]);
-
+  const [books, setBooks] = useState([]);
   const router = useRouter();
 
-  const addBook = () => {
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const { data, error } = await supabase.from('books').select('*');
+      if (!error) setBooks(data);
+    };
+    fetchBooks();
+  }, []);
+
+  const addBook = async () => {
     const title = prompt('Enter book title:');
     const author = prompt('Enter author name:');
-    const ideas = prompt('How many ideas saved?');
-    if (title && author && ideas) {
-      setBooks([...books, { title, author, ideas: parseInt(ideas) }]);
+    
+    if (title && author) {
+    const { data, error } = await supabase.from('books').insert([
+      {
+        title,
+        author,
+      }
+    ]).select();
+
+      if (error) {
+        console.error('❌ Error inserting book:', error.message || error);
+      } else {
+        console.log('✅ Book inserted:', data);
+        setBooks(prev => [...prev, data[0]]);
+      }
     }
   };
 
-  const deleteBook = (index) => {
-    const updatedBooks = [...books];
-    updatedBooks.splice(index, 1);
-    setBooks(updatedBooks);
+  const deleteBook = async (id) => {
+    const { error } = await supabase.from('books').delete().eq('id', id);
+    if (!error) {
+      setBooks(prev => prev.filter(book => book.id !== id));
+    }
   };
 
   return (
@@ -45,7 +62,7 @@ export default function MyBooksPage() {
                 <div className="text-sm text-gray-500">by {book.author}</div>
                 <div className="text-sm mt-1">💡 {book.ideas} ideas saved</div>
                 <button
-                  onClick={() => router.push(`/books/${index}`)}
+                  onClick={() => router.push(`/bookshelf-v2/${book.id}`)}
                   className="text-sm mt-2 inline-block px-3 py-1 bg-[#e5ecfb] text-[#2349b4] rounded-full"
                 >
                   View Map
@@ -53,7 +70,7 @@ export default function MyBooksPage() {
               </div>
             </div>
             <button
-              onClick={() => deleteBook(index)}
+              onClick={() => deleteBook(book.id)}
               className="text-lg text-gray-400 hover:text-red-500 bg-transparent border-none rounded-full p-2 shadow-md"
             >
               🗑️
