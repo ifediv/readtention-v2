@@ -20,23 +20,74 @@ export default function MindMapCards() {
   ];
 
   return (
-    <section className="px-6 py-12 bg-white">
-      <h2 className="text-xl font-semibold mb-6 text-[#1d2233]">Featured Mind Maps</h2>
+    <section style={{
+      padding: '60px 24px',
+      background: '#ffffff',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      <h2 style={{
+        fontSize: '32px',
+        fontWeight: '700',
+        color: '#1a1a1a',
+        textAlign: 'center',
+        marginBottom: '40px'
+      }}>Featured Mind Maps</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div style={{
+        maxWidth: '1000px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '32px'
+      }}>
         {cards.map((card, idx) => (
           <div
             key={idx}
             onClick={() => alert(`Open: ${card.title}`)}
-            className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition cursor-pointer"
+            style={{
+              background: 'white',
+              padding: '28px',
+              borderRadius: '16px',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-8px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
           >
-            <h3 className="font-semibold text-lg mb-1">{card.title}</h3>
-            <p className="text-sm text-gray-600 mb-2">{card.description}</p>
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div>
+              <h3 style={{
+                fontSize: '22px',
+                fontWeight: '600',
+                color: '#1a1a1a',
+                marginBottom: '8px'
+              }}>{card.title}</h3>
+              <p style={{
+                fontSize: '15px',
+                color: '#4b5563',
+                marginBottom: '16px'
+              }}>{card.description}</p>
+            </div>
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '8px',
+              marginTop: '16px'
+            }}>
               {card.tags.map((tag, i) => (
                 <span
                   key={i}
-                  className="bg-gray-100 text-xs px-2 py-1 rounded-full"
+                  style={{
+                    background: '#e0f2fe',
+                    color: '#1e40af',
+                    fontSize: '12px',
+                    fontWeight: '500',
+                    padding: '6px 12px',
+                    borderRadius: '20px'
+                  }}
                 >
                   {tag}
                 </span>

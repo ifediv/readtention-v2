@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -539,93 +540,89 @@ const sendMessage = async () => {
           <div key={i}>
             <div
               style={{
-                maxWidth: '85%',
-                padding: '12px 16px',
-                borderRadius: '12px',
-                fontSize: '14px',
-                lineHeight: '1.5',
-                whiteSpace: 'pre-wrap',
+                background: msg.role === 'user' ? 'linear-gradient(135deg, #e0f2fe 0%, #bfdbfe 100%)' : 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+                color: msg.role === 'user' ? '#1e40af' : '#166534',
+                padding: '12px 18px',
+                borderRadius: '18px',
+                maxWidth: '80%',
                 alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                marginLeft: msg.role === 'user' ? 'auto' : '0',
-                background: msg.role === 'user' 
-                  ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'
-                  : '#ffffff',
-                color: msg.role === 'user' ? '#ffffff' : '#374151',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                border: msg.role === 'ai' ? '1px solid #e5e7eb' : 'none'
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                fontSize: '14px',
+                lineHeight: '1.5'
               }}
             >
               {msg.content}
             </div>
-            {msg.type === 'welcome' && msg.role === 'ai' && (
-              <div style={{
-                display: 'flex',
-                gap: '12px',
-                marginTop: '12px'
-              }}>
-                <button 
-                  onClick={handleYesClick}
-                  style={{
-                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                    color: '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: '20px',
-                    fontSize: '13px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontWeight: '500',
-                    boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
-                  onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-                >
-                  Yes
-                </button>
-                <button 
-                  onClick={handleNoClick}
-                  style={{
-                    background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
-                    color: '#ffffff',
-                    padding: '8px 16px',
-                    borderRadius: '20px',
-                    fontSize: '13px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontWeight: '500',
-                    boxShadow: '0 2px 8px rgba(239, 68, 68, 0.3)',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
-                  onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-                >
-                  No
-                </button>
-              </div>
-            )}
           </div>
         ))}
+        {messages.length > 0 && messages[messages.length - 1].type === 'welcome' && (
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+            <button
+              onClick={handleYesClick}
+              style={{
+                padding: '8px 16px',
+                background: 'linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '500',
+                boxShadow: '0 2px 8px rgba(167, 139, 250, 0.3)',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
+              onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+            >
+              Yes, let's build a mind map!
+            </button>
+            <button
+              onClick={handleNoClick}
+              style={{
+                padding: '8px 16px',
+                background: '#e5e7eb',
+                color: '#4b5563',
+                border: 'none',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                fontSize: '13px',
+                fontWeight: '500',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
+              onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+            >
+              No, not right now.
+            </button>
+          </div>
+        )}
         <div ref={chatEndRef} />
       </div>
 
       <div style={{
         display: 'flex',
-        gap: '12px',
+        gap: '10px',
         paddingTop: '16px',
         borderTop: '1px solid #e5e7eb'
       }}>
         <input
           type="text"
           value={input}
-          placeholder="Type your thoughts..."
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              sendMessage();
+            }
+          }}
+          placeholder="Type your thoughts..."
           style={{
             flex: '1',
+            padding: '12px 18px',
             border: '2px solid #e5e7eb',
-            padding: '12px 16px',
             borderRadius: '25px',
             fontSize: '14px',
+            fontFamily: 'inherit',
             outline: 'none',
             transition: 'border-color 0.2s ease'
           }}
@@ -636,14 +633,14 @@ const sendMessage = async () => {
           onClick={sendMessage}
           style={{
             background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-            color: '#ffffff',
+            color: 'white',
+            border: 'none',
             padding: '12px 20px',
             borderRadius: '25px',
-            fontSize: '14px',
-            border: 'none',
             cursor: 'pointer',
+            fontSize: '14px',
             fontWeight: '500',
-            boxShadow: '0 2px 8px rgba(99, 102, 241, 0.3)',
+            boxShadow: '0 4px 14px rgba(99, 102, 241, 0.3)',
             transition: 'all 0.2s ease'
           }}
           onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
@@ -655,3 +652,5 @@ const sendMessage = async () => {
     </div>
   );
 }
+
+

@@ -1,32 +1,108 @@
+'use client';
+
 export default function HowItWorks() {
   return (
-    <div className="how-it-works" style={{ padding: '40px 16px', backgroundColor: '#fafafa', textAlign: 'center' }}>
-      <h2 style={{ fontFamily: 'Playfair Display, serif', fontSize: '24px', color: '#1d2233', marginBottom: '32px' }}>How It Works</h2>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '600px', margin: '0 auto' }}>
-        <div style={{ background: '#ffffff', borderRadius: '12px', padding: '20px', boxShadow: '0 8px 16px rgba(216, 245, 227, 0.6)', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ fontSize: '28px' }}>📚</div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '600' }}>Save Key Ideas</div>
-            <div style={{ fontSize: '14px', color: '#555' }}>Highlight important takeaways from any book you’re reading.</div>
+    <section style={{
+      padding: '60px 24px',
+      background: '#f9fafb',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      <h2 style={{
+        fontSize: '32px',
+        fontWeight: '700',
+        color: '#1a1a1a',
+        textAlign: 'center',
+        marginBottom: '40px'
+      }}>How It Works</h2>
+      <div style={{
+        maxWidth: '800px',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '16px',
+          padding: '28px',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px'
+        }}>
+          <div style={{
+            fontSize: '40px',
+            flexShrink: '0'
+          }}>📚</div>
+          <div>
+            <h3 style={{
+              fontSize: '22px',
+              fontWeight: '600',
+              color: '#1a1a1a',
+              marginBottom: '8px'
+            }}>Save Key Ideas</h3>
+            <p style={{
+              fontSize: '15px',
+              color: '#4b5563'
+            }}>Highlight important takeaways from any book you're reading.</p>
           </div>
         </div>
 
-        <div style={{ background: '#ffffff', borderRadius: '12px', padding: '20px', boxShadow: '0 8px 16px rgba(229, 236, 251, 0.6)', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ fontSize: '28px' }}>🧠</div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '600' }}>Generate Mind Maps</div>
-            <div style={{ fontSize: '14px', color: '#555' }}>Our AI turns your notes into structured, visual mind maps.</div>
+        <div style={{
+          background: 'white',
+          borderRadius: '16px',
+          padding: '28px',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px'
+        }}>
+          <div style={{
+            fontSize: '40px',
+            flexShrink: '0'
+          }}>🧠</div>
+          <div>
+            <h3 style={{
+              fontSize: '22px',
+              fontWeight: '600',
+              color: '#1a1a1a',
+              marginBottom: '8px'
+            }}>Generate Mind Maps</h3>
+            <p style={{
+              fontSize: '15px',
+              color: '#4b5563'
+            }}>Our AI turns your notes into structured, visual mind maps.</p>
           </div>
         </div>
 
-        <div style={{ background: '#ffffff', borderRadius: '12px', padding: '20px', boxShadow: '0 8px 16px rgba(253, 236, 200, 0.6)', display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ fontSize: '28px' }}>🔁</div>
-          <div style={{ textAlign: 'left' }}>
-            <div style={{ fontFamily: 'Playfair Display, serif', fontSize: '18px', fontWeight: '600' }}>Remember Effortlessly</div>
-            <div style={{ fontSize: '14px', color: '#555' }}>Review maps regularly and retain more over time.</div>
+        <div style={{
+          background: 'white',
+          borderRadius: '16px',
+          padding: '28px',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px'
+        }}>
+          <div style={{
+            fontSize: '40px',
+            flexShrink: '0'
+          }}>🔁</div>
+          <div>
+            <h3 style={{
+              fontSize: '22px',
+              fontWeight: '600',
+              color: '#1a1a1a',
+              marginBottom: '8px'
+            }}>Remember Effortlessly</h3>
+            <p style={{
+              fontSize: '15px',
+              color: '#4b5563'
+            }}>Review maps regularly and retain more over time.</p>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
+

@@ -1,3 +1,4 @@
+
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -9,33 +10,98 @@ export default function TopHeader() {
   const toggleMenu = () => setMenuOpen((prev) => !prev);
 
   return (
-    <header className="bg-white px-6 py-4 shadow-sm flex justify-between items-center">
-      <div className="text-xl font-semibold text-[#1d2233]">readtention.com</div>
+    <header style={{
+      background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+      padding: '16px 24px',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      <div style={{
+        fontSize: '24px',
+        fontWeight: '700',
+        color: '#166534',
+        letterSpacing: '-0.5px'
+      }}>readtention.com</div>
 
       {/* Menu icon (for mobile) */}
-      <button onClick={toggleMenu} className="md:hidden text-2xl">
+      <button onClick={toggleMenu} style={{
+        fontSize: '24px',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        display: 'none' // Hidden on desktop
+      }} className="md:hidden">
         📚
       </button>
 
       {/* Desktop nav */}
-      <nav className="hidden md:flex gap-6 text-sm text-[#1d2233]">
-        <a onClick={() => router.push('/books')} className="cursor-pointer">My Books</a>
-        <a onClick={() => router.push('/bookshelf')} className="cursor-pointer">Bookshelf</a>
-        <a className="cursor-pointer">Trends</a>
-        <a className="cursor-pointer">AI Agent</a>
-        <a className="cursor-pointer">Pricing</a>
+      <nav style={{
+        display: 'flex',
+        gap: '24px',
+        fontSize: '15px',
+        color: '#374151',
+        fontWeight: '500'
+      }} className="hidden md:flex">
+        <a onClick={() => router.push('/books')} style={{
+          cursor: 'pointer',
+          transition: 'color 0.2s ease',
+          textDecoration: 'none'
+        }} onMouseOver={(e) => e.target.style.color = '#10b981'}
+          onMouseOut={(e) => e.target.style.color = '#374151'}>My Books</a>
+        <a onClick={() => router.push('/bookshelf')} style={{
+          cursor: 'pointer',
+          transition: 'color 0.2s ease',
+          textDecoration: 'none'
+        }} onMouseOver={(e) => e.target.style.color = '#10b981'}
+          onMouseOut={(e) => e.target.style.color = '#374151'}>Bookshelf</a>
+        <a style={{
+          cursor: 'pointer',
+          transition: 'color 0.2s ease',
+          textDecoration: 'none'
+        }} onMouseOver={(e) => e.target.style.color = '#10b981'}
+          onMouseOut={(e) => e.target.style.color = '#374151'}>Trends</a>
+        <a style={{
+          cursor: 'pointer',
+          transition: 'color 0.2s ease',
+          textDecoration: 'none'
+        }} onMouseOver={(e) => e.target.style.color = '#10b981'}
+          onMouseOut={(e) => e.target.style.color = '#374151'}>AI Agent</a>
+        <a style={{
+          cursor: 'pointer',
+          transition: 'color 0.2s ease',
+          textDecoration: 'none'
+        }} onMouseOver={(e) => e.target.style.color = '#10b981'}
+          onMouseOut={(e) => e.target.style.color = '#374151'}>Pricing</a>
       </nav>
 
       {/* Mobile dropdown menu */}
       {menuOpen && (
-        <div className="absolute top-16 right-4 bg-white rounded-lg shadow-md flex flex-col p-4 gap-3 md:hidden text-sm z-50">
-          <a onClick={() => { toggleMenu(); router.push('/books'); }} className="cursor-pointer">My Books</a>
-          <a onClick={() => { toggleMenu(); router.push('/bookshelf'); }} className="cursor-pointer">Bookshelf</a>
-          <a className="cursor-pointer">Trends</a>
-          <a className="cursor-pointer">AI Agent</a>
-          <a className="cursor-pointer">Pricing</a>
+        <div style={{
+          position: 'absolute',
+          top: '64px',
+          right: '16px',
+          background: 'white',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '16px',
+          gap: '12px',
+          fontSize: '14px',
+          zIndex: '50'
+        }} className="md:hidden">
+          <a onClick={() => { toggleMenu(); router.push('/books'); }} style={{ cursor: 'pointer' }}>My Books</a>
+          <a onClick={() => { toggleMenu(); router.push('/bookshelf'); }} style={{ cursor: 'pointer' }}>Bookshelf</a>
+          <a onClick={() => { toggleMenu(); router.push('/trends'); }} style={{ cursor: 'pointer' }}>Trends</a>
+          <a onClick={() => { toggleMenu(); router.push('/ai-agent'); }} style={{ cursor: 'pointer' }}>AI Agent</a>
+          <a onClick={() => { toggleMenu(); router.push('/pricing'); }} style={{ cursor: 'pointer' }}>Pricing</a>
         </div>
       )}
     </header>
   );
 }
+
+

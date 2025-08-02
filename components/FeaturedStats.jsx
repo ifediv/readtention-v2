@@ -1,3 +1,4 @@
+
 'use client';
 
 export default function FeaturedStats() {
@@ -9,18 +10,50 @@ export default function FeaturedStats() {
   ];
 
   return (
-    <section className="bg-[#f9f9f9] py-8 px-4">
-      <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <section style={{
+      background: '#f9fafb',
+      padding: '40px 24px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    }}>
+      <div style={{
+        maxWidth: '1000px',
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '24px',
+        textAlign: 'center'
+      }}>
         {stats.map((stat, i) => (
           <div
             key={i}
-            className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center justify-center"
+            style={{
+              background: 'white',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              borderRadius: '12px',
+              padding: '24px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'transform 0.2s ease',
+            }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
           >
-            <div className="text-2xl mb-2">{stat.icon}</div>
-            <p className="text-sm font-medium text-gray-700">{stat.label}</p>
+            <div style={{
+              fontSize: '36px',
+              marginBottom: '12px'
+            }}>{stat.icon}</div>
+            <p style={{
+              fontSize: '15px',
+              fontWeight: '500',
+              color: '#4b5563'
+            }}>{stat.label}</p>
           </div>
         ))}
       </div>
     </section>
   );
 }
+
+
