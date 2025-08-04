@@ -1,14 +1,14 @@
 import { supabase } from '@/utils/supabaseClient';
 
 export async function POST(req) {
-  const { book_id } = await req.json();
+  const { message, book_id } = await req.json();
 
-  if (!book_id) {
-    return new Response(JSON.stringify({ error: 'Missing book_id' }), { status: 400 });
+  if (!message || !book_id) {
+    return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
   }
 
   try {
-    // Get book information
+    // Get book information for context
     const { data: bookData, error: bookError } = await supabase
       .from('books')
       .select('title, author')
@@ -20,116 +20,42 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: 'Book not found' }), { status: 404 });
     }
 
-    // Get all messages for this book
-    const { data: messages, error: messagesError } = await supabase
-      .from('messages')
-      .select('content, role')
-      .eq('book_id', book_id)
-      .order('created_at', { ascending: true });
+    // Create Socratic reflection prompt
+    const reflectionPrompt = `You are a Socratic assistant helping a user reflect on their reading of "${bookData.title}" by ${bookData.author}.
 
-    if (messagesError) {
-      console.error('Failed to fetch messages:', messagesError);
-      return new Response(JSON.stringify({ error: 'Failed to fetch messages' }), { status: 500 });
-    }
+The user just shared: "${message}"
 
-    // Get all insights for this book
-    const { data: insights, error: insightsError } = await supabase
-      .from('insights')
-      .select('themes, quotes, takeaways')
-      .eq('book_id', book_id);
+Respond as a thoughtful Socratic teacher would:
+1. Acknowledge their insight
+2. Ask a follow-up question that deepens their thinking
+3. Help them connect ideas to the book's main themes
+4. Encourage them to provide specific examples or elaborate further
 
-    if (insightsError) {
-      console.error('Failed to fetch insights:', insightsError);
-      return new Response(JSON.stringify({ error: 'Failed to fetch insights' }), { status: 500 });
-    }
+Keep your response concise (2-3 sentences max) and conversational. Focus on guiding their reflection rather than providing answers.`;
 
-    // Combine all user messages and insights
-    const userMessages = messages.filter(msg => msg.role === 'user').map(msg => msg.content);
-    const allThemes = insights.flatMap(insight => insight.themes || []);
-    const allQuotes = insights.flatMap(insight => insight.quotes || []);
-    const allTakeaways = insights.flatMap(insight => insight.takeaways || []);
-
-    // Generate mindmap using OpenAI
-    const mindmapPrompt = `
-Create a comprehensive mind map for the book "${bookData.title}" by ${bookData.author} based on the user's conversation and insights.
-
-User Messages:
-${userMessages.join('\n')}
-
-Extracted Themes:
-${allThemes.join('\n')}
-
-Extracted Quotes:
-${allQuotes.join('\n')}
-
-Extracted Takeaways:
-${allTakeaways.join('\n')}
-
-Generate a mind map in Markmap markdown format. The structure should be:
-
-# ${bookData.title}
-
-## Central Theme
-- Main idea or thesis
-
-## Key Concepts
-- Concept 1
-  - Sub-concept 1.1
-  - Sub-concept 1.2
-- Concept 2
-  - Sub-concept 2.1
-  - Sub-concept 2.2
-
-## Important Quotes
-- "Quote 1"
-- "Quote 2"
-
-## Personal Takeaways
-- Takeaway 1
-- Takeaway 2
-
-## Applications
-- How to apply concept 1
-- How to apply concept 2
-
-Make it comprehensive but organized. Focus on the most important insights from the user's conversation.
-`;
-
-    const mindmapRes = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Call OpenAI for Socratic reflection
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-4-1106-preview',
-        messages: [{ role: 'user', content: mindmapPrompt }]
+        model: 'gpt-4',
+        messages: [
+          { role: 'system', content: 'You are a Socratic assistant focused on helping users reflect deeply on their reading.' },
+          { role: 'user', content: reflectionPrompt }
+        ],
+        max_tokens: 150,
+        temperature: 0.7
       })
     });
 
-    const mindmapData = await mindmapRes.json();
-    const mindmapMarkdown = mindmapData.choices?.[0]?.message?.content || '';
-
-    if (!mindmapMarkdown) {
-      return new Response(JSON.stringify({ error: 'Failed to generate mindmap' }), { status: 500 });
-    }
-
-    // Save the mindmap to Supabase
-    const { error: mindmapInsertError } = await supabase.from('mindmaps').insert([
-      {
-        book_id,
-        content: mindmapMarkdown,
-        created_at: new Date().toISOString()
-      }
-    ]);
-
-    if (mindmapInsertError) {
-      console.error('Failed to save mindmap:', mindmapInsertError);
-      return new Response(JSON.stringify({ error: 'Failed to save mindmap' }), { status: 500 });
-    }
+    const aiData = await openaiResponse.json();
+    const aiResponse = aiData.choices?.[0]?.message?.content || 'I appreciate you sharing that insight. Can you tell me more about how this connects to the main themes of the book?';
 
     return new Response(JSON.stringify({ 
-      mindmap: mindmapMarkdown,
+      ai_response: aiResponse,
       success: true 
     }), {
       status: 200,
@@ -137,7 +63,10 @@ Make it comprehensive but organized. Focus on the most important insights from t
     });
 
   } catch (error) {
-    console.error('Error generating mindmap:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
+    console.error('Error in reflect API:', error);
+    return new Response(JSON.stringify({ 
+      ai_response: "That's an interesting perspective. Can you elaborate on that thought?",
+      error: 'Fallback response due to API error'
+    }), { status: 200 });
   }
 }

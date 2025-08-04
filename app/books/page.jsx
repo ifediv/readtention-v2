@@ -48,7 +48,20 @@ export default function MyBooksPage() {
     <div className="py-12 px-4 bg-white text-center">
       <h2 className="font-playfair text-2xl text-[#1d2233] mb-6">Your Bookshelf</h2>
       <div className="flex flex-col gap-8 max-w-[700px] mx-auto">
-        {books.map((book, index) => (
+        {books.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-6xl mb-4">📚</div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">Your bookshelf is empty</h3>
+            <p className="text-gray-500 mb-6">Start building your knowledge by adding your first book!</p>
+            <button
+              onClick={addBook}
+              className="px-6 py-3 bg-[#2349b4] text-white border-none rounded-full text-base cursor-pointer hover:bg-[#1a3798] transition-colors"
+            >
+              📖 Add Your First Book
+            </button>
+          </div>
+        ) : (
+          books.map((book, index) => (
           <div
             key={index}
             className="bg-white rounded-xl p-6 shadow-lg flex justify-between items-center gap-4 text-left"
@@ -76,7 +89,8 @@ export default function MyBooksPage() {
               🗑️
             </button>
           </div>
-        ))}
+          ))
+        )}
       </div>
       <button
         onClick={addBook}

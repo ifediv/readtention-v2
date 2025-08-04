@@ -1,0 +1,23 @@
+{
+  "extends": "next",
+  "env": {
+    "node": true,
+    "browser": true,
+    "es2022": true
+  },
+  "rules": {
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    "react-hooks/exhaustive-deps": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["app/api/**/*.js", "app/api/**/*.ts"],
+      "env": {
+        "node": true
+      },
+      "globals": {
+        "process": "readonly"
+      }
+    }
+  ]
+}

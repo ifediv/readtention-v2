@@ -44,7 +44,7 @@ export default function HowItWorks() {
             <p style={{
               fontSize: '15px',
               color: '#4b5563'
-            }}>Highlight important takeaways from any book you're reading.</p>
+            }}>Highlight important takeaways from any book you&apos;re reading.</p>
           </div>
         </div>
 

@@ -20,80 +20,43 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: 'Book not found' }), { status: 404 });
     }
 
-    // Get all messages for this book
-    const { data: messages, error: messagesError } = await supabase
-      .from('messages')
-      .select('content, role')
-      .eq('book_id', book_id)
-      .order('created_at', { ascending: true });
+    // Generate mindmap directly using the book information
 
-    if (messagesError) {
-      console.error('Failed to fetch messages:', messagesError);
-      return new Response(JSON.stringify({ error: 'Failed to fetch messages' }), { status: 500 });
-    }
+    // Generate mindmap using OpenAI with user's specific prompt structure
+    const mindmapPrompt = `Create a mind map of "${bookData.title}" by ${bookData.author}. List topics as central ideas, main branches, and sub-branches.
 
-    // Get all insights for this book
-    const { data: insights, error: insightsError } = await supabase
-      .from('insights')
-      .select('themes, quotes, takeaways')
-      .eq('book_id', book_id);
-
-    if (insightsError) {
-      console.error('Failed to fetch insights:', insightsError);
-      return new Response(JSON.stringify({ error: 'Failed to fetch insights' }), { status: 500 });
-    }
-
-    // Combine all user messages and insights
-    const userMessages = messages.filter(msg => msg.role === 'user').map(msg => msg.content);
-    const allThemes = insights.flatMap(insight => insight.themes || []);
-    const allQuotes = insights.flatMap(insight => insight.quotes || []);
-    const allTakeaways = insights.flatMap(insight => insight.takeaways || []);
-
-    // Generate mindmap using OpenAI
-    const mindmapPrompt = `
-Create a comprehensive mind map for the book "${bookData.title}" by ${bookData.author} based on the user's conversation and insights.
-
-User Messages:
-${userMessages.join('\n')}
-
-Extracted Themes:
-${allThemes.join('\n')}
-
-Extracted Quotes:
-${allQuotes.join('\n')}
-
-Extracted Takeaways:
-${allTakeaways.join('\n')}
-
-Generate a mind map in Markmap markdown format. The structure should be:
+Please format the response as markdown for use with Markmap, following this structure:
 
 # ${bookData.title}
 
-## Central Theme
-- Main idea or thesis
+## Main Themes
+- [Primary theme 1]
+  - [Supporting concept]
+  - [Key detail]
+- [Primary theme 2]
+  - [Supporting concept]
+  - [Key detail]
 
 ## Key Concepts
-- Concept 1
-  - Sub-concept 1.1
-  - Sub-concept 1.2
-- Concept 2
-  - Sub-concept 2.1
-  - Sub-concept 2.2
+- [Important concept 1]
+  - [Sub-point]
+  - [Application]
+- [Important concept 2]
+  - [Sub-point]
+  - [Application]
 
-## Important Quotes
-- "Quote 1"
-- "Quote 2"
+## Practical Applications
+- [How to apply the ideas]
+  - [Specific action]
+  - [Expected outcome]
 
-## Personal Takeaways
-- Takeaway 1
-- Takeaway 2
+Make it comprehensive yet clear, focusing on the book's most important insights and practical applications.`;
 
-## Applications
-- How to apply concept 1
-- How to apply concept 2
-
-Make it comprehensive but organized. Focus on the most important insights from the user's conversation.
-`;
+    // Check if OpenAI API key exists
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('Missing OpenAI API key');
+      return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), { status: 500 });
+    }
 
     const mindmapRes = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -102,30 +65,46 @@ Make it comprehensive but organized. Focus on the most important insights from t
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-4-1106-preview',
-        messages: [{ role: 'user', content: mindmapPrompt }]
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: mindmapPrompt }],
+        max_tokens: 2000,
+        temperature: 0.7
       })
     });
+
+    if (!mindmapRes.ok) {
+      const errorData = await mindmapRes.json();
+      console.error('OpenAI API error:', errorData);
+      return new Response(JSON.stringify({ 
+        error: `OpenAI API error: ${errorData.error?.message || 'Unknown error'}` 
+      }), { status: 500 });
+    }
 
     const mindmapData = await mindmapRes.json();
     const mindmapMarkdown = mindmapData.choices?.[0]?.message?.content || '';
 
     if (!mindmapMarkdown) {
-      return new Response(JSON.stringify({ error: 'Failed to generate mindmap' }), { status: 500 });
+      console.error('Empty response from OpenAI:', mindmapData);
+      return new Response(JSON.stringify({ error: 'Empty response from OpenAI' }), { status: 500 });
     }
 
-    // Save the mindmap to Supabase
-    const { error: mindmapInsertError } = await supabase.from('mindmaps').insert([
-      {
-        book_id,
-        content: mindmapMarkdown,
-        created_at: new Date().toISOString()
-      }
-    ]);
+    // Try to save the mindmap to Supabase (optional - don't fail if this doesn't work)
+    try {
+      const { error: mindmapInsertError } = await supabase.from('mindmaps').insert([
+        {
+          book_id,
+          content: mindmapMarkdown,
+          created_at: new Date().toISOString()
+        }
+      ]);
 
-    if (mindmapInsertError) {
-      console.error('Failed to save mindmap:', mindmapInsertError);
-      return new Response(JSON.stringify({ error: 'Failed to save mindmap' }), { status: 500 });
+      if (mindmapInsertError) {
+        console.warn('Failed to save mindmap to database (continuing anyway):', mindmapInsertError);
+      } else {
+        console.log('Successfully saved mindmap to database');
+      }
+    } catch (saveError) {
+      console.warn('Error saving mindmap to database (continuing anyway):', saveError);
     }
 
     return new Response(JSON.stringify({ 
