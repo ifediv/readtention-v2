@@ -26,3 +26,23 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Custom font family utilities */
+.font-playfair {
+  font-family: var(--font-playfair), serif;
+}
+
+/* Custom utilities for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
