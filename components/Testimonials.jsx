@@ -4,29 +4,29 @@
 export default function Testimonials() {
   const testimonials = [
     {
-      text: `“Readtention helped me speak more clearly about books I read months ago. It's like having a second memory.”`,
-      name: 'James H.',
-      emoji: '👤',
+      text: `"I used to pretend I remembered books in conversations. Now I confidently reference insights from books I read months ago, complete with specific examples and quotes."`,
+      name: 'Sarah Chen',
+      emoji: '📚',
     },
     {
-      text: `“I finally feel confident discussing big ideas with friends. The maps make it easy to recall and share.”`,
-      name: 'Priya M.',
-      emoji: '👤',
+      text: `"Finally! A system that actually works. I've tried everything - Notion, Obsidian, handwritten notes. This is the first tool where I don't lose my thoughts."`,
+      name: 'Marcus Rodriguez',
+      emoji: '🎯',
     },
     {
-      text: `“In a world full of distractions, Readtention keeps the wisdom I care about front and center.”`,
-      name: 'Malik T.',
-      emoji: '👤',
+      text: `"The AI mind maps are incredible. In 3 seconds, I get a visual summary that would take me an hour to create manually. My book club thinks I'm a genius now."`,
+      name: 'Dr. Jennifer Park',
+      emoji: '🧠',
     },
     {
-      text: `“It's not just a note app—it's a tool for becoming a better thinker and communicator.”`,
-      name: 'Sophia L.',
-      emoji: '👤',
+      text: `"I read 50+ books a year and remembered maybe 10% of them. Now I can discuss any book I've read with confidence and depth. Game changer."`,
+      name: 'Ahmed Hassan',
+      emoji: '⚡',
     },
     {
-      text: `“Readtention made it possible for me to actually *retain* what I read in a meaningful way.”`,
-      name: 'Amina R.',
-      emoji: '👤',
+      text: `"My manager asked how I became so articulate about complex topics. It's because I finally have a system that makes knowledge stick."`,
+      name: 'Lisa Thompson',
+      emoji: '💡',
     },
   ];
 
@@ -43,7 +43,7 @@ export default function Testimonials() {
         textAlign: 'center',
         marginBottom: '40px'
       }}>
-        Why Readers Love Readtention
+        The Reading Transformation
       </h2>
 
       <div style={{
@@ -60,9 +60,10 @@ export default function Testimonials() {
               background: 'white',
               borderRadius: '16px',
               padding: '28px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(139, 92, 246, 0.15)',
               textAlign: 'left',
               transition: 'transform 0.2s ease',
+              border: '1px solid rgba(139, 92, 246, 0.1)'
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-8px)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -92,14 +93,14 @@ export default function Testimonials() {
           href="#"
           style={{
             padding: '16px 32px',
-            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+            background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
             color: 'white',
             border: 'none',
             borderRadius: '30px',
             fontSize: '18px',
             fontWeight: '600',
             cursor: 'pointer',
-            boxShadow: '0 8px 20px rgba(99, 102, 241, 0.3)',
+            boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3)',
             transition: 'all 0.3s ease',
             textDecoration: 'none',
             display: 'inline-block'
@@ -107,7 +108,7 @@ export default function Testimonials() {
           onMouseOver={(e) => e.target.style.transform = 'translateY(-3px)'}
           onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
         >
-          Join Thousands of Readers
+          Start Remembering Every Book You Read
         </a>
       </div>
     </section>

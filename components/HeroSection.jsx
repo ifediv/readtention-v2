@@ -6,8 +6,8 @@ export default function HeroSection() {
     <section style={{
       textAlign: 'center',
       padding: '80px 24px',
-      background: 'linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%)',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      background: 'linear-gradient(135deg, #faf8ff 0%, #f3f0ff 50%, #ffffff 100%)',
+      fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       <h1 style={{
         fontSize: '48px',
@@ -18,31 +18,42 @@ export default function HeroSection() {
         maxWidth: '900px',
         margin: '0 auto 24px auto'
       }}>
-        The note-taking system that actually helps you remember what you read.
+        Stop Forgetting the Books You Love
       </h1>
       <p style={{
-        fontSize: '18px',
+        fontSize: '20px',
         color: '#4b5563',
-        marginBottom: '40px'
+        marginBottom: '16px',
+        maxWidth: '700px',
+        margin: '0 auto 16px auto',
+        lineHeight: '1.5'
       }}>
-        Start remembering today
+        You read amazing books. You love the insights. But weeks later, you can barely remember what they were about.
+      </p>
+      <p style={{
+        fontSize: '18px',
+        color: '#6b7280',
+        marginBottom: '40px',
+        fontWeight: '600'
+      }}>
+        Finally, there's a solution that book lovers actually use.
       </p>
       <button style={{
         padding: '16px 32px',
-        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+        background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
         color: 'white',
         border: 'none',
         borderRadius: '30px',
         fontSize: '18px',
         fontWeight: '600',
         cursor: 'pointer',
-        boxShadow: '0 8px 20px rgba(99, 102, 241, 0.3)',
+        boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3)',
         transition: 'all 0.3s ease'
       }}
       onMouseOver={(e) => e.target.style.transform = 'translateY(-3px)'}
       onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
       >
-        Get Started Free
+        See How It Works With Your Last Book
       </button>
     </section>
   );

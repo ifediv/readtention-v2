@@ -77,21 +77,42 @@ export default function MindMapCards() {
               gap: '8px',
               marginTop: '16px'
             }}>
-              {card.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  style={{
-                    background: '#e0f2fe',
-                    color: '#1e40af',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    padding: '6px 12px',
-                    borderRadius: '20px'
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
+              {card.tags.map((tag, i) => {
+                const tagColors = [
+                  { bg: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', color: '#92400e', shadow: 'rgba(245, 158, 11, 0.2)' },
+                  { bg: 'linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%)', color: '#6d28d9', shadow: 'rgba(139, 92, 246, 0.2)' },
+                  { bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', color: '#166534', shadow: 'rgba(34, 197, 94, 0.2)' },
+                  { bg: 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%)', color: '#be185d', shadow: 'rgba(236, 72, 153, 0.2)' },
+                  { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', color: '#0c4a6e', shadow: 'rgba(14, 165, 233, 0.2)' }
+                ];
+                const colorIndex = i % tagColors.length;
+                return (
+                  <span
+                    key={i}
+                    style={{
+                      background: tagColors[colorIndex].bg,
+                      color: tagColors[colorIndex].color,
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      padding: '8px 14px',
+                      borderRadius: '16px',
+                      boxShadow: `0 4px 8px ${tagColors[colorIndex].shadow}`,
+                      border: `1px solid ${tagColors[colorIndex].color}20`,
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.transform = 'translateY(-1px)';
+                      e.target.style.boxShadow = `0 6px 12px ${tagColors[colorIndex].shadow}`;
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.transform = 'translateY(0)';
+                      e.target.style.boxShadow = `0 4px 8px ${tagColors[colorIndex].shadow}`;
+                    }}
+                  >
+                    {tag}
+                  </span>
+                );
+              })}
             </div>
           </div>
         ))}

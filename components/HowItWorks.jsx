@@ -25,10 +25,11 @@ export default function HowItWorks() {
           background: 'white',
           borderRadius: '16px',
           padding: '28px',
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(16, 185, 129, 0.15)',
           display: 'flex',
           alignItems: 'center',
-          gap: '20px'
+          gap: '20px',
+          border: '1px solid rgba(16, 185, 129, 0.1)'
         }}>
           <div style={{
             fontSize: '40px',
@@ -52,10 +53,11 @@ export default function HowItWorks() {
           background: 'white',
           borderRadius: '16px',
           padding: '28px',
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(16, 185, 129, 0.15)',
           display: 'flex',
           alignItems: 'center',
-          gap: '20px'
+          gap: '20px',
+          border: '1px solid rgba(16, 185, 129, 0.1)'
         }}>
           <div style={{
             fontSize: '40px',
@@ -79,10 +81,11 @@ export default function HowItWorks() {
           background: 'white',
           borderRadius: '16px',
           padding: '28px',
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(16, 185, 129, 0.15)',
           display: 'flex',
           alignItems: 'center',
-          gap: '20px'
+          gap: '20px',
+          border: '1px solid rgba(16, 185, 129, 0.1)'
         }}>
           <div style={{
             fontSize: '40px',

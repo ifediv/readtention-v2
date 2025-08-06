@@ -3,55 +3,156 @@
 
 export default function FeaturedStats() {
   const stats = [
-    { icon: '🎯', label: 'Curated for you' },
-    { icon: '🖥️', label: '1,234 readers today' },
-    { icon: '📚', label: '542 books logged' },
-    { icon: '🧠', label: '9,876 insights retained' }
+    { icon: '📚', label: '10,847', sublabel: 'readers never forget' },
+    { icon: '🧠', label: '73%', sublabel: 'more insights retained' },
+    { icon: '💬', label: '4.9/5', sublabel: 'book confidence boost' },
+    { icon: '⚡', label: '2.3s', sublabel: 'mind map generation' }
   ];
 
   return (
     <section style={{
-      background: '#f9fafb',
-      padding: '40px 24px',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      background: 'linear-gradient(135deg, #fefefe 0%, #f8fafc 100%)',
+      padding: '32px 0',
+      fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      overflow: 'hidden',
+      position: 'relative'
     }}>
+      {/* Subtle top border */}
       <div style={{
-        maxWidth: '1000px',
-        margin: '0 auto',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '24px',
-        textAlign: 'center'
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: 'linear-gradient(to right, transparent, rgba(139, 92, 246, 0.2), transparent)'
+      }} />
+      
+      {/* Infinite scrolling ticker */}
+      <div style={{
+        display: 'flex',
+        animation: 'scroll 30s linear infinite',
+        width: 'max-content'
       }}>
+        {/* First set */}
         {stats.map((stat, i) => (
           <div
-            key={i}
+            key={`first-${i}`}
             style={{
-              background: 'white',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-              borderRadius: '12px',
-              padding: '24px',
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'transform 0.2s ease',
+              gap: '12px',
+              padding: '16px 32px',
+              marginRight: '48px',
+              background: 'rgba(255, 255, 255, 0.8)',
+              borderRadius: '12px',
+              border: '1px solid rgba(139, 92, 246, 0.1)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              transition: 'all 0.3s ease',
+              cursor: 'default',
+              minWidth: 'fit-content',
+              whiteSpace: 'nowrap'
             }}
-            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-5px)'}
-            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.15)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)';
+            }}
           >
-            <div style={{
-              fontSize: '36px',
-              marginBottom: '12px'
-            }}>{stat.icon}</div>
-            <p style={{
-              fontSize: '15px',
-              fontWeight: '500',
-              color: '#4b5563'
-            }}>{stat.label}</p>
+            <span style={{ fontSize: '20px' }}>{stat.icon}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#1f2937',
+                background: stat.label.match(/^\d/) ? 'linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%)' : 'none',
+                WebkitBackgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset',
+                WebkitTextFillColor: stat.label.match(/^\d/) ? 'transparent' : 'inherit',
+                backgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset'
+              }}>
+                {stat.label}
+              </span>
+              {stat.sublabel && (
+                <span style={{
+                  fontSize: '12px',
+                  color: '#6b7280',
+                  fontWeight: '500'
+                }}>
+                  {stat.sublabel}
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+        
+        {/* Second set for seamless loop */}
+        {stats.map((stat, i) => (
+          <div
+            key={`second-${i}`}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '16px 32px',
+              marginRight: '48px',
+              background: 'rgba(255, 255, 255, 0.8)',
+              borderRadius: '12px',
+              border: '1px solid rgba(139, 92, 246, 0.1)',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              transition: 'all 0.3s ease',
+              cursor: 'default',
+              minWidth: 'fit-content',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.15)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.04)';
+            }}
+          >
+            <span style={{ fontSize: '20px' }}>{stat.icon}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+              <span style={{
+                fontSize: '16px',
+                fontWeight: '600',
+                color: '#1f2937',
+                background: stat.label.match(/^\d/) ? 'linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%)' : 'none',
+                WebkitBackgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset',
+                WebkitTextFillColor: stat.label.match(/^\d/) ? 'transparent' : 'inherit',
+                backgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset'
+              }}>
+                {stat.label}
+              </span>
+              {stat.sublabel && (
+                <span style={{
+                  fontSize: '12px',
+                  color: '#6b7280',
+                  fontWeight: '500'
+                }}>
+                  {stat.sublabel}
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>
+
+      {/* CSS Animation */}
+      <style jsx>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        
+        section:hover div[style*="animation"] {
+          animation-play-state: paused;
+        }
+      `}</style>
     </section>
   );
 }

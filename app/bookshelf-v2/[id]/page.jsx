@@ -15,8 +15,15 @@ export default function BookshelfPage() {
   const [mindmapMarkdown, setMindmapMarkdown] = useState('');
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showGuidance, setShowGuidance] = useState(true);
 
   useEffect(() => {
+    // Check if guidance has been dismissed before
+    const guidanceDismissed = localStorage.getItem('mindmap-guidance-dismissed');
+    if (guidanceDismissed === 'true') {
+      setShowGuidance(false);
+    }
+
     const fetchBook = async () => {
       if (!bookId) {
         setLoading(false);
@@ -43,6 +50,11 @@ export default function BookshelfPage() {
     
     fetchBook();
   }, [bookId]);
+
+  const dismissGuidance = () => {
+    setShowGuidance(false);
+    localStorage.setItem('mindmap-guidance-dismissed', 'true');
+  };
 
   const saveNotes = async () => {
     const { error } = await supabase.from('notes').insert([
@@ -113,7 +125,7 @@ export default function BookshelfPage() {
       maxWidth: '1200px', 
       margin: '0 auto'
     }}>
-      <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: '28px', color: '#1d2233', marginBottom: '8px' }}>
+      <h1 className="font-playfair" style={{ fontSize: '28px', color: '#1d2233', marginBottom: '8px' }}>
         {book.title}
       </h1>
       <p style={{ fontSize: '14px', color: '#777', marginBottom: '32px' }}>
@@ -121,17 +133,65 @@ export default function BookshelfPage() {
       </p>
 
       {/* User Guidance */}
-      <div style={{ marginBottom: '24px', padding: '16px', backgroundColor: '#f8f9ff', border: '1px solid #e6e1fa', borderRadius: '8px' }}>
-        <h3 style={{ fontSize: '16px', fontWeight: '600', color: '#5f3dc4', marginBottom: '8px', margin: 0 }}>
-          🎯 How to create your mind map
-        </h3>
-        <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px', margin: 0 }}>
-          <strong>Socratic Assistant (Recommended):</strong> Click &quot;Yes, let&apos;s go!&quot; and I&apos;ll automatically generate a comprehensive mind map using AI.
-        </p>
-        <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
-          <strong>Manual Mode:</strong> Fill out the forms below to create your own custom mind map step by step.
-        </p>
-      </div>
+      {showGuidance && (
+        <div style={{ 
+          marginBottom: '24px', 
+          padding: '18px', 
+          background: 'linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%)', 
+          border: '1px solid #e1e7ff', 
+          borderRadius: '12px', 
+          position: 'relative',
+          boxShadow: '0 4px 12px rgba(95, 60, 196, 0.08)'
+        }}>
+          <button
+            onClick={dismissGuidance}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'rgba(255, 255, 255, 0.8)',
+              border: 'none',
+              fontSize: '16px',
+              color: '#999',
+              cursor: 'pointer',
+              padding: '6px',
+              borderRadius: '6px',
+              transition: 'all 0.2s ease',
+              backdropFilter: 'blur(4px)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.color = '#666';
+              e.target.style.background = 'rgba(255, 255, 255, 0.95)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.color = '#999';
+              e.target.style.background = 'rgba(255, 255, 255, 0.8)';
+            }}
+            title="Don't show this again"
+          >
+            ✕
+          </button>
+          <h3 style={{ 
+            fontSize: '17px', 
+            fontWeight: '600', 
+            background: 'linear-gradient(135deg, #6D28D9 0%, #5f3dc4 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            marginBottom: '10px', 
+            margin: 0, 
+            paddingRight: '32px' 
+          }}>
+            🎯 How to create your mind map
+          </h3>
+          <p style={{ fontSize: '14px', color: '#4b5563', marginBottom: '10px', margin: 0, lineHeight: '1.5' }}>
+            <strong style={{ color: '#374151' }}>Socratic Assistant (Recommended):</strong> Click &quot;Yes, let&apos;s go!&quot; and I&apos;ll automatically generate a comprehensive mind map using AI.
+          </p>
+          <p style={{ fontSize: '14px', color: '#4b5563', margin: 0, lineHeight: '1.5' }}>
+            <strong style={{ color: '#374151' }}>Manual Mode:</strong> Fill out the forms below to create your own custom mind map step by step.
+          </p>
+        </div>
+      )}
 
       {/* AI Mode Toggle */}
       <div style={{ marginBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '6px' }}>
@@ -140,14 +200,32 @@ export default function BookshelfPage() {
             onClick={() => setMode('socratic')} 
             style={{ 
               fontSize: '13px', 
-              background: mode === 'socratic' ? '#e6e1fa' : '#f0f0f0', 
-              color: mode === 'socratic' ? '#5f3dc4' : '#666', 
-              border: 'none', 
-              padding: '8px 16px', 
-              borderRadius: '9999px', 
+              background: mode === 'socratic' 
+                ? 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)' 
+                : 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', 
+              color: mode === 'socratic' ? '#ffffff' : '#64748b', 
+              border: mode === 'socratic' ? 'none' : '1px solid #e2e8f0',
+              padding: '10px 18px', 
+              borderRadius: '12px', 
               cursor: 'pointer', 
-              boxShadow: mode === 'socratic' ? '0 6px 12px rgba(157, 112, 249, 0.4)' : 'none',
-              transition: 'all 0.2s ease'
+              boxShadow: mode === 'socratic' 
+                ? '0 8px 16px rgba(139, 92, 246, 0.3), 0 3px 6px rgba(139, 92, 246, 0.2)' 
+                : '0 2px 4px rgba(100, 116, 139, 0.1)',
+              transition: 'all 0.3s ease',
+              fontWeight: mode === 'socratic' ? '600' : '500',
+              transform: mode === 'socratic' ? 'translateY(-1px)' : 'none'
+            }}
+            onMouseOver={(e) => {
+              if (mode !== 'socratic') {
+                e.target.style.boxShadow = '0 4px 8px rgba(100, 116, 139, 0.15)';
+                e.target.style.transform = 'translateY(-1px)';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (mode !== 'socratic') {
+                e.target.style.boxShadow = '0 2px 4px rgba(100, 116, 139, 0.1)';
+                e.target.style.transform = 'none';
+              }
             }}
           >
             ✨ Socratic Assistant
@@ -156,17 +234,35 @@ export default function BookshelfPage() {
             onClick={() => setMode('manual')} 
             style={{ 
               fontSize: '13px', 
-              background: mode === 'manual' ? '#e6f2ff' : '#f0f0f0', 
-              color: mode === 'manual' ? '#2349b4' : '#666', 
-              border: 'none', 
-              padding: '8px 16px', 
-              borderRadius: '9999px', 
+              background: mode === 'manual' 
+                ? 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)' 
+                : 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)', 
+              color: mode === 'manual' ? '#ffffff' : '#64748b', 
+              border: mode === 'manual' ? 'none' : '1px solid #e2e8f0',
+              padding: '10px 18px', 
+              borderRadius: '12px', 
               cursor: 'pointer', 
               display: 'flex', 
               alignItems: 'center', 
               gap: '6px',
-              boxShadow: mode === 'manual' ? '0 6px 12px rgba(35, 73, 180, 0.3)' : 'none',
-              transition: 'all 0.2s ease'
+              boxShadow: mode === 'manual' 
+                ? '0 8px 16px rgba(59, 130, 246, 0.3), 0 3px 6px rgba(59, 130, 246, 0.2)' 
+                : '0 2px 4px rgba(100, 116, 139, 0.1)',
+              transition: 'all 0.3s ease',
+              fontWeight: mode === 'manual' ? '600' : '500',
+              transform: mode === 'manual' ? 'translateY(-1px)' : 'none'
+            }}
+            onMouseOver={(e) => {
+              if (mode !== 'manual') {
+                e.target.style.boxShadow = '0 4px 8px rgba(100, 116, 139, 0.15)';
+                e.target.style.transform = 'translateY(-1px)';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (mode !== 'manual') {
+                e.target.style.boxShadow = '0 2px 4px rgba(100, 116, 139, 0.1)';
+                e.target.style.transform = 'none';
+              }
             }}
           >
             🛠️ Manual Mode
@@ -209,9 +305,30 @@ export default function BookshelfPage() {
           </div>
           <button
             onClick={saveNotes}
-            style={{ marginTop: '16px', padding: '10px 20px', backgroundColor: '#e5ecfb', color: '#2349b4', border: 'none', borderRadius: '9999px', fontSize: '14px', cursor: 'pointer' }}
+            style={{ 
+              marginTop: '20px', 
+              padding: '12px 24px', 
+              background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', 
+              color: '#ffffff', 
+              border: 'none', 
+              borderRadius: '12px', 
+              fontSize: '14px', 
+              fontWeight: '600',
+              cursor: 'pointer',
+              boxShadow: '0 8px 16px rgba(59, 130, 246, 0.3), 0 3px 6px rgba(59, 130, 246, 0.2)',
+              transition: 'all 0.3s ease',
+              transform: 'translateY(0)'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 12px 20px rgba(59, 130, 246, 0.4), 0 4px 8px rgba(59, 130, 246, 0.3)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 8px 16px rgba(59, 130, 246, 0.3), 0 3px 6px rgba(59, 130, 246, 0.2)';
+            }}
           >
-            Save & Generate Map
+            Save & Generate Map ✨
           </button>
         </div>
       )}
