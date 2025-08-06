@@ -24,7 +24,7 @@ export default function FeaturedStats() {
         left: 0,
         right: 0,
         height: '1px',
-        background: 'linear-gradient(to right, transparent, rgba(139, 92, 246, 0.2), transparent)'
+        background: 'linear-gradient(to right, transparent, rgba(35, 73, 180, 0.2), transparent)'
       }} />
       
       {/* Infinite scrolling ticker */}
@@ -45,7 +45,7 @@ export default function FeaturedStats() {
               marginRight: '48px',
               background: 'rgba(255, 255, 255, 0.8)',
               borderRadius: '12px',
-              border: '1px solid rgba(139, 92, 246, 0.1)',
+              border: '1px solid rgba(35, 73, 180, 0.1)',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
               transition: 'all 0.3s ease',
               cursor: 'default',
@@ -54,7 +54,7 @@ export default function FeaturedStats() {
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.15)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(35, 73, 180, 0.15)';
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
@@ -66,11 +66,7 @@ export default function FeaturedStats() {
               <span style={{
                 fontSize: '16px',
                 fontWeight: '600',
-                color: '#1f2937',
-                background: stat.label.match(/^\d/) ? 'linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%)' : 'none',
-                WebkitBackgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset',
-                WebkitTextFillColor: stat.label.match(/^\d/) ? 'transparent' : 'inherit',
-                backgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset'
+                color: stat.label.match(/^\d/) ? '#2349b4' : '#1f2937'
               }}>
                 {stat.label}
               </span>
@@ -99,7 +95,7 @@ export default function FeaturedStats() {
               marginRight: '48px',
               background: 'rgba(255, 255, 255, 0.8)',
               borderRadius: '12px',
-              border: '1px solid rgba(139, 92, 246, 0.1)',
+              border: '1px solid rgba(35, 73, 180, 0.1)',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
               transition: 'all 0.3s ease',
               cursor: 'default',
@@ -108,7 +104,7 @@ export default function FeaturedStats() {
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 8px 24px rgba(139, 92, 246, 0.15)';
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(35, 73, 180, 0.15)';
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.transform = 'translateY(0)';
@@ -120,11 +116,7 @@ export default function FeaturedStats() {
               <span style={{
                 fontSize: '16px',
                 fontWeight: '600',
-                color: '#1f2937',
-                background: stat.label.match(/^\d/) ? 'linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%)' : 'none',
-                WebkitBackgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset',
-                WebkitTextFillColor: stat.label.match(/^\d/) ? 'transparent' : 'inherit',
-                backgroundClip: stat.label.match(/^\d/) ? 'text' : 'unset'
+                color: stat.label.match(/^\d/) ? '#2349b4' : '#1f2937'
               }}>
                 {stat.label}
               </span>

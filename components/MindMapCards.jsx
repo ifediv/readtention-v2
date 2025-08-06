@@ -80,7 +80,7 @@ export default function MindMapCards() {
               {card.tags.map((tag, i) => {
                 const tagColors = [
                   { bg: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', color: '#92400e', shadow: 'rgba(245, 158, 11, 0.2)' },
-                  { bg: 'linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%)', color: '#6d28d9', shadow: 'rgba(139, 92, 246, 0.2)' },
+                  { bg: 'linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)', color: '#1a3798', shadow: 'rgba(35, 73, 180, 0.2)' },
                   { bg: 'linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)', color: '#166534', shadow: 'rgba(34, 197, 94, 0.2)' },
                   { bg: 'linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%)', color: '#be185d', shadow: 'rgba(236, 72, 153, 0.2)' },
                   { bg: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)', color: '#0c4a6e', shadow: 'rgba(14, 165, 233, 0.2)' }

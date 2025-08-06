@@ -188,6 +188,8 @@ const BookCard = ({ book, onSelect, isSelected }) => {
 
 const MyBookCard = ({ book, onDelete }) => {
   const router = useRouter();
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
 
   return (
     <motion.div
@@ -199,8 +201,32 @@ const MyBookCard = ({ book, onDelete }) => {
       className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
     >
       <div className="flex items-center gap-4">
-        <div className="w-16 h-20 bg-gradient-to-br from-[#2349b4] to-[#1a3798] rounded-lg flex items-center justify-center text-white text-2xl shadow-md">
-          📖
+        <div className="relative w-16 h-20 rounded-lg overflow-hidden shadow-md">
+          {book.cover_url && !imageError ? (
+            <>
+              {imageLoading && (
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse flex items-center justify-center">
+                  <div className="text-gray-400 text-xl">📖</div>
+                </div>
+              )}
+              <Image
+                src={book.cover_url}
+                alt={book.title}
+                fill
+                className="object-cover"
+                onLoad={() => setImageLoading(false)}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+                sizes="64px"
+              />
+            </>
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-[#2349b4] to-[#1a3798] rounded-lg flex items-center justify-center text-white text-2xl shadow-md">
+              📖
+            </div>
+          )}
         </div>
         <div className="flex-1">
           <h3 className="font-playfair text-lg font-bold text-gray-800 mb-1">{book.title}</h3>
@@ -337,12 +363,32 @@ export default function MyBooksPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Navigation Header */}
+      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => window.location.href = '/'}
+                className="flex items-center gap-2 bg-gradient-to-r from-[#2349b4] to-[#1a3798] text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+              >
+                <span>🏠</span>
+                <span>Home</span>
+              </motion.button>
+              <div className="text-2xl font-playfair font-bold text-gray-800">📚 Your Learning Library</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="pt-16 pb-8 text-center"
+        className="pt-8 pb-8 text-center"
       >
         <h1 className="font-playfair text-4xl md:text-5xl font-bold text-gray-800 mb-4">
           Your Learning Library

@@ -60,10 +60,10 @@ export default function Testimonials() {
               background: 'white',
               borderRadius: '16px',
               padding: '28px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(139, 92, 246, 0.15)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08), 0 0 20px rgba(35, 73, 180, 0.15)',
               textAlign: 'left',
               transition: 'transform 0.2s ease',
-              border: '1px solid rgba(139, 92, 246, 0.1)'
+              border: '1px solid rgba(35, 73, 180, 0.1)'
             }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-8px)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -93,14 +93,14 @@ export default function Testimonials() {
           href="#"
           style={{
             padding: '16px 32px',
-            background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+            background: 'linear-gradient(135deg, #2349b4 0%, #1a3798 100%)',
             color: 'white',
             border: 'none',
             borderRadius: '30px',
             fontSize: '18px',
             fontWeight: '600',
             cursor: 'pointer',
-            boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3)',
+            boxShadow: '0 8px 20px rgba(35, 73, 180, 0.3)',
             transition: 'all 0.3s ease',
             textDecoration: 'none',
             display: 'inline-block'

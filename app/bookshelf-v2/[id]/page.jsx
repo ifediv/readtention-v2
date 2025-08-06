@@ -56,6 +56,11 @@ export default function BookshelfPage() {
     localStorage.setItem('mindmap-guidance-dismissed', 'true');
   };
 
+  const showGuidanceAgain = () => {
+    setShowGuidance(true);
+    localStorage.removeItem('mindmap-guidance-dismissed');
+  };
+
   const saveNotes = async () => {
     const { error } = await supabase.from('notes').insert([
       {
@@ -123,12 +128,110 @@ export default function BookshelfPage() {
       backgroundColor: '#ffffff', 
       padding: '48px 24px',
       maxWidth: '1200px', 
-      margin: '0 auto'
+      margin: '0 auto',
+      position: 'relative'
     }}>
-      <h1 className="font-playfair" style={{ fontSize: '28px', color: '#1d2233', marginBottom: '8px' }}>
+      {/* Navigation Header */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: '32px',
+        paddingBottom: '16px',
+        borderBottom: '1px solid #e5e7eb'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <button
+            onClick={() => window.location.href = '/'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'linear-gradient(135deg, #2349b4 0%, #1a3798 100%)',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '12px',
+              border: 'none',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(35, 73, 180, 0.2)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            <span>🏠</span>
+            <span>Home</span>
+          </button>
+          <button
+            onClick={() => window.location.href = '/books'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: 'rgba(35, 73, 180, 0.1)',
+              color: '#2349b4',
+              padding: '8px 16px',
+              borderRadius: '12px',
+              border: '1px solid rgba(35, 73, 180, 0.2)',
+              fontSize: '14px',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.background = 'rgba(35, 73, 180, 0.15)';
+              e.target.style.transform = 'translateY(-1px)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.background = 'rgba(35, 73, 180, 0.1)';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            <span>📚</span>
+            <span>Library</span>
+          </button>
+        </div>
+
+        {/* Help Button - only show if guidance is dismissed */}
+        {!showGuidance && (
+          <button
+            onClick={showGuidanceAgain}
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              color: 'white',
+              border: 'none',
+              fontSize: '16px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
+              transition: 'all 0.2s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'scale(1.1)';
+              e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.3)';
+            }}
+            title="Show help guide"
+          >
+            ?
+          </button>
+        )}
+      </div>
+
+      <h1 className="font-playfair" style={{ fontSize: '32px', color: '#1d2233', marginBottom: '8px', fontWeight: '700' }}>
         {book.title}
       </h1>
-      <p style={{ fontSize: '14px', color: '#777', marginBottom: '32px' }}>
+      <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '32px' }}>
         by {book.author}
       </p>
 
@@ -333,7 +436,13 @@ export default function BookshelfPage() {
         </div>
       )}
 
-      {mindmapMarkdown && <MindMapDisplay markdownContent={mindmapMarkdown} />}
+      {mindmapMarkdown && (
+        <MindMapDisplay 
+          markdownContent={mindmapMarkdown} 
+          bookId={bookId}
+          onMarkdownChange={setMindmapMarkdown}
+        />
+      )}
     </div>
   );
 }

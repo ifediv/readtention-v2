@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { supabase } from '../utils/supabaseClient';
+import MindmapLensSelector from './MindmapLensSelector';
 
 export default function SocraticChat({ bookId, book, setMindmapMarkdown }) {
   const [messages, setMessages] = useState([]);
@@ -11,29 +12,39 @@ export default function SocraticChat({ bookId, book, setMindmapMarkdown }) {
   const [branches, setBranches] = useState([]); 
   const [subBranches, setSubBranches] = useState({});
   const [welcomeAnswered, setWelcomeAnswered] = useState(false);
+  const [showLensSelector, setShowLensSelector] = useState(false);
   const chatEndRef = useRef(null);
 
   const handleAcceptMindmap = async () => {
     setWelcomeAnswered(true);
+    setShowLensSelector(true);
+  };
+
+  const handleGenerateWithLenses = async (lensData) => {
+    // Show loading message with lens information
+    const selectedModes = Object.keys(lensData.selectedModes);
+    const modesText = selectedModes.length > 0 
+      ? ` with ${selectedModes.join(', ')} perspectives`
+      : '';
     
-    // Show loading message
     const loadingMsg = {
       book_id: bookId,
       role: 'ai',
-      content: `🎯 Great! I'm generating your mind map for "${book?.title}" using AI. This may take a few moments...`,
+      content: `🎯 Perfect! I'm generating your personalized mind map for "${book?.title}"${modesText}. This may take a few moments...`,
     };
     await supabase.from('messages').insert([loadingMsg]);
     setMessages(prev => [...prev, loadingMsg]);
 
     try {
-      // Call the generate-mindmap API
+      // Call the generate-mindmap API with lens data
       const response = await fetch('/api/generate-mindmap', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          book_id: bookId
+          book_id: bookId,
+          lensData: lensData
         })
       });
 
@@ -48,11 +59,11 @@ export default function SocraticChat({ bookId, book, setMindmapMarkdown }) {
         // Set the generated mindmap
         setMindmapMarkdown(result.mindmap);
         
-        // Show success message
+        // Show success message with personalization note
         const successMsg = {
           book_id: bookId,
           role: 'ai',
-          content: `✅ Your AI-generated mind map is ready! You can see it below. Would you like to refine or add anything to it?`,
+          content: `✅ Your personalized mind map is ready! I've focused on the ${selectedModes.join(' and ')} perspective${selectedModes.length > 1 ? 's' : ''} you selected. You can see it below. Would you like to refine or add anything to it?`,
         };
         await supabase.from('messages').insert([successMsg]);
         setMessages(prev => [...prev, successMsg]);
@@ -315,7 +326,7 @@ export default function SocraticChat({ bookId, book, setMindmapMarkdown }) {
           value={input}
           placeholder="Type your thoughts..."
           onChange={(e) => setInput(e.target.value)}
-          className="flex-1 border px-3 py-2 rounded-md text-sm"
+          className="flex-1 border border-gray-300 px-3 py-2 rounded-md text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:border-[#2349b4] focus:ring-1 focus:ring-[#2349b4] bg-white"
         />
         <button
           onClick={sendMessage}
@@ -324,6 +335,14 @@ export default function SocraticChat({ bookId, book, setMindmapMarkdown }) {
           Send
         </button>
       </div>
+
+      {/* Mindmap Lens Selector Modal */}
+      <MindmapLensSelector
+        isOpen={showLensSelector}
+        onClose={() => setShowLensSelector(false)}
+        onGenerate={handleGenerateWithLenses}
+        book={book}
+      />
     </div>
   );
 }

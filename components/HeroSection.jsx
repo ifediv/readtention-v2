@@ -36,18 +36,18 @@ export default function HeroSection() {
         marginBottom: '40px',
         fontWeight: '600'
       }}>
-        Finally, there's a solution that book lovers actually use.
+        Finally, there&apos;s a solution that book lovers actually use.
       </p>
       <button style={{
         padding: '16px 32px',
-        background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+        background: 'linear-gradient(135deg, #2349b4 0%, #1a3798 100%)',
         color: 'white',
         border: 'none',
         borderRadius: '30px',
         fontSize: '18px',
         fontWeight: '600',
         cursor: 'pointer',
-        boxShadow: '0 8px 20px rgba(139, 92, 246, 0.3)',
+        boxShadow: '0 8px 20px rgba(35, 73, 180, 0.3)',
         transition: 'all 0.3s ease'
       }}
       onMouseOver={(e) => e.target.style.transform = 'translateY(-3px)'}

@@ -1,8 +1,9 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
+import MindMapViewer from './MindMapViewer';
 
-export default function MindMapDisplay({ markdownContent }) {
+export default function MindMapDisplay({ markdownContent, bookId, onMarkdownChange }) {
   const svgRef = useRef();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,33 +60,10 @@ export default function MindMapDisplay({ markdownContent }) {
   }
 
   return (
-    <div style={{ marginTop: '40px', border: '1px solid #ddd', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#fafafa' }}>
-      <div style={{ padding: '12px', borderBottom: '1px solid #ddd', backgroundColor: '#fff' }}>
-        <h4 style={{ margin: 0, fontSize: '14px', fontWeight: '600', color: '#333' }}>
-          🧠 Mind Map
-        </h4>
-      </div>
-      
-      {loading && (
-        <div style={{ padding: '40px', textAlign: 'center', color: '#666' }}>
-          Loading mind map...
-        </div>
-      )}
-      
-      {error && (
-        <div style={{ padding: '20px', color: '#d73027', fontSize: '14px' }}>
-          {error}
-        </div>
-      )}
-      
-      <div 
-        ref={svgRef}
-        style={{ 
-          width: '100%', 
-          height: '400px', 
-          display: loading ? 'none' : 'block'
-        }}
-      />
-    </div>
+    <MindMapViewer 
+      markdown={markdownContent}
+      bookId={bookId}
+      onMarkdownChange={onMarkdownChange}
+    />
   );
 }

@@ -14,12 +14,12 @@ export default function TopHeader() {
     <header style={{
       background: 'linear-gradient(135deg, #faf8ff 0%, #f3f0ff 100%)',
       padding: '16px 24px',
-      boxShadow: '0 4px 20px rgba(139, 92, 246, 0.08)',
+      boxShadow: '0 4px 20px rgba(35, 73, 180, 0.08)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      borderBottom: '1px solid rgba(139, 92, 246, 0.1)'
+      borderBottom: '1px solid rgba(35, 73, 180, 0.1)'
     }}>
       <div 
         onClick={() => router.push('/')}
@@ -98,8 +98,8 @@ export default function TopHeader() {
           borderRadius: '8px',
           position: 'relative'
         }} onMouseOver={(e) => {
-          e.target.style.color = '#8b5cf6';
-          e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+          e.target.style.color = '#2349b4';
+          e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           e.target.style.transform = 'translateY(-1px)';
         }}
         onMouseOut={(e) => {
@@ -107,22 +107,6 @@ export default function TopHeader() {
           e.target.style.background = 'transparent';
           e.target.style.transform = 'translateY(0)';
         }}>My Books</a>
-        <a onClick={() => router.push('/bookshelf')} style={{
-          cursor: 'pointer',
-          transition: 'all 0.3s ease',
-          textDecoration: 'none',
-          padding: '8px 16px',
-          borderRadius: '8px'
-        }} onMouseOver={(e) => {
-          e.target.style.color = '#8b5cf6';
-          e.target.style.background = 'rgba(139, 92, 246, 0.1)';
-          e.target.style.transform = 'translateY(-1px)';
-        }}
-        onMouseOut={(e) => {
-          e.target.style.color = '#64748b';
-          e.target.style.background = 'transparent';
-          e.target.style.transform = 'translateY(0)';
-        }}>Bookshelf</a>
         <a style={{
           cursor: 'pointer',
           transition: 'all 0.3s ease',
@@ -130,8 +114,8 @@ export default function TopHeader() {
           padding: '8px 16px',
           borderRadius: '8px'
         }} onMouseOver={(e) => {
-          e.target.style.color = '#8b5cf6';
-          e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+          e.target.style.color = '#2349b4';
+          e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           e.target.style.transform = 'translateY(-1px)';
         }}
         onMouseOut={(e) => {
@@ -146,8 +130,8 @@ export default function TopHeader() {
           padding: '8px 16px',
           borderRadius: '8px'
         }} onMouseOver={(e) => {
-          e.target.style.color = '#8b5cf6';
-          e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+          e.target.style.color = '#2349b4';
+          e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           e.target.style.transform = 'translateY(-1px)';
         }}
         onMouseOut={(e) => {
@@ -162,8 +146,8 @@ export default function TopHeader() {
           padding: '8px 16px',
           borderRadius: '8px'
         }} onMouseOver={(e) => {
-          e.target.style.color = '#8b5cf6';
-          e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+          e.target.style.color = '#2349b4';
+          e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           e.target.style.transform = 'translateY(-1px)';
         }}
         onMouseOut={(e) => {
@@ -181,8 +165,8 @@ export default function TopHeader() {
           right: '16px',
           background: 'linear-gradient(135deg, #ffffff 0%, #faf8ff 100%)',
           borderRadius: '12px',
-          border: '1px solid rgba(139, 92, 246, 0.15)',
-          boxShadow: '0 8px 24px rgba(139, 92, 246, 0.15), 0 4px 8px rgba(0, 0, 0, 0.05)',
+          border: '1px solid rgba(35, 73, 180, 0.15)',
+          boxShadow: '0 8px 24px rgba(35, 73, 180, 0.15), 0 4px 8px rgba(0, 0, 0, 0.05)',
           display: 'flex',
           flexDirection: 'column',
           padding: '20px',
@@ -199,28 +183,13 @@ export default function TopHeader() {
             borderRadius: '8px',
             textDecoration: 'none'
           }} onMouseOver={(e) => {
-            e.target.style.color = '#8b5cf6';
-            e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+            e.target.style.color = '#2349b4';
+            e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           }}
           onMouseOut={(e) => {
             e.target.style.color = '#64748b';
             e.target.style.background = 'transparent';
           }}>My Books</a>
-          <a onClick={() => { toggleMenu(); router.push('/bookshelf'); }} style={{ 
-            cursor: 'pointer',
-            color: '#64748b',
-            transition: 'all 0.2s ease',
-            padding: '8px 12px',
-            borderRadius: '8px',
-            textDecoration: 'none'
-          }} onMouseOver={(e) => {
-            e.target.style.color = '#8b5cf6';
-            e.target.style.background = 'rgba(139, 92, 246, 0.1)';
-          }}
-          onMouseOut={(e) => {
-            e.target.style.color = '#64748b';
-            e.target.style.background = 'transparent';
-          }}>Bookshelf</a>
           <a onClick={() => { toggleMenu(); router.push('/trends'); }} style={{ 
             cursor: 'pointer',
             color: '#64748b',
@@ -229,8 +198,8 @@ export default function TopHeader() {
             borderRadius: '8px',
             textDecoration: 'none'
           }} onMouseOver={(e) => {
-            e.target.style.color = '#8b5cf6';
-            e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+            e.target.style.color = '#2349b4';
+            e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           }}
           onMouseOut={(e) => {
             e.target.style.color = '#64748b';
@@ -244,8 +213,8 @@ export default function TopHeader() {
             borderRadius: '8px',
             textDecoration: 'none'
           }} onMouseOver={(e) => {
-            e.target.style.color = '#8b5cf6';
-            e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+            e.target.style.color = '#2349b4';
+            e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           }}
           onMouseOut={(e) => {
             e.target.style.color = '#64748b';
@@ -259,8 +228,8 @@ export default function TopHeader() {
             borderRadius: '8px',
             textDecoration: 'none'
           }} onMouseOver={(e) => {
-            e.target.style.color = '#8b5cf6';
-            e.target.style.background = 'rgba(139, 92, 246, 0.1)';
+            e.target.style.color = '#2349b4';
+            e.target.style.background = 'rgba(35, 73, 180, 0.1)';
           }}
           onMouseOut={(e) => {
             e.target.style.color = '#64748b';
