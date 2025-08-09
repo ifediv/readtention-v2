@@ -17,14 +17,26 @@ export default function FeaturedStats() {
       overflow: 'hidden',
       position: 'relative'
     }}>
-      {/* Subtle top border */}
+      {/* Top moving gradient shine (moving right) */}
       <div style={{
         position: 'absolute',
         top: 0,
-        left: 0,
-        right: 0,
-        height: '1px',
-        background: 'linear-gradient(to right, transparent, rgba(35, 73, 180, 0.2), transparent)'
+        left: '-100%',
+        width: '200%',
+        height: '2px',
+        background: 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.15), rgba(16, 185, 129, 0.15), transparent)',
+        animation: 'shimmerRight 8s ease-in-out infinite'
+      }} />
+      
+      {/* Bottom moving gradient shine (moving left) */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        right: '-100%',
+        width: '200%',
+        height: '2px',
+        background: 'linear-gradient(270deg, transparent, rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15), rgba(251, 113, 133, 0.15), transparent)',
+        animation: 'shimmerLeft 10s ease-in-out infinite reverse'
       }} />
       
       {/* Infinite scrolling ticker */}
@@ -141,7 +153,19 @@ export default function FeaturedStats() {
           100% { transform: translateX(-50%); }
         }
         
-        section:hover div[style*="animation"] {
+        @keyframes shimmerRight {
+          0% { transform: translateX(-100%); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateX(100%); opacity: 0; }
+        }
+        
+        @keyframes shimmerLeft {
+          0% { transform: translateX(100%); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: translateX(-100%); opacity: 0; }
+        }
+        
+        section:hover div[style*="animation"]:not([style*="shimmer"]) {
           animation-play-state: paused;
         }
       `}</style>

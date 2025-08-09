@@ -6,7 +6,7 @@ export default function HeroSection() {
     <section style={{
       textAlign: 'center',
       padding: '80px 24px',
-      background: 'linear-gradient(135deg, #faf8ff 0%, #f3f0ff 50%, #ffffff 100%)',
+      background: 'linear-gradient(135deg, #f8faff 0%, #eff6ff 50%, #ffffff 100%)',
       fontFamily: 'var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       <h1 style={{
@@ -40,14 +40,14 @@ export default function HeroSection() {
       </p>
       <button style={{
         padding: '16px 32px',
-        background: 'linear-gradient(135deg, #2349b4 0%, #1a3798 100%)',
+        background: 'linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%)',
         color: 'white',
         border: 'none',
         borderRadius: '30px',
         fontSize: '18px',
         fontWeight: '600',
         cursor: 'pointer',
-        boxShadow: '0 8px 20px rgba(35, 73, 180, 0.3)',
+        boxShadow: '0 8px 20px rgba(30, 64, 175, 0.25)',
         transition: 'all 0.3s ease'
       }}
       onMouseOver={(e) => e.target.style.transform = 'translateY(-3px)'}

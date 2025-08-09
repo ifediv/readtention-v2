@@ -5,24 +5,27 @@ export default function MindMapCards() {
     {
       title: 'Atomic Habits',
       description: 'Tiny changes, remarkable results.',
-      tags: ['📘 Productivity', '🧠 Popular']
+      tags: ['📘 Productivity', '🧠 Popular'],
+      glow: '0 8px 24px rgba(139, 92, 246, 0.08), 0 0 20px rgba(167, 139, 250, 0.06), 0 4px 12px rgba(196, 181, 253, 0.12)' // Purple glow
     },
     {
       title: 'Deep Work',
       description: 'Guard your time. Focus deeply.',
-      tags: ['🖥️ Focus', '🔥 High Retention']
+      tags: ['🖥️ Focus', '🔥 High Retention'],
+      glow: '0 8px 24px rgba(6, 182, 212, 0.08), 0 0 20px rgba(34, 211, 238, 0.06), 0 4px 12px rgba(103, 232, 249, 0.12)' // Cyan glow
     },
     {
       title: 'The War of Art',
       description: 'Beat resistance. Create daily.',
-      tags: ['🎨 Creative Flow', '📚 Reader Favorite']
+      tags: ['🎨 Creative Flow', '📚 Reader Favorite'],
+      glow: '0 8px 24px rgba(251, 146, 60, 0.08), 0 0 20px rgba(253, 186, 116, 0.06), 0 4px 12px rgba(254, 215, 170, 0.12)' // Orange glow
     }
   ];
 
   return (
     <section style={{
       padding: '60px 24px',
-      background: '#ffffff',
+      background: 'linear-gradient(180deg, #f8faff 0%, #ffffff 100%)',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
     }}>
       <h2 style={{
@@ -48,7 +51,7 @@ export default function MindMapCards() {
               background: 'white',
               padding: '28px',
               borderRadius: '16px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
+              boxShadow: card.glow,
               transition: 'all 0.3s ease',
               cursor: 'pointer',
               display: 'flex',
