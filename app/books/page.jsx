@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/utils/supabaseClient';
 import { openLibrary } from '@/utils/openLibraryClient';
+import UnifiedHeader from '@/components/UnifiedHeader';
 
 // Search and loading components
 const SearchBar = ({ onSearch, isSearching }) => {
@@ -361,27 +362,13 @@ export default function MyBooksPage() {
     }
   };
 
+  const breadcrumbs = [
+    { label: 'My Library', href: null }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Navigation Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => window.location.href = '/'}
-                className="flex items-center gap-2 bg-gradient-to-r from-[#2349b4] to-[#1a3798] text-white px-4 py-2 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all duration-200"
-              >
-                <span>🏠</span>
-                <span>Home</span>
-              </motion.button>
-              <div className="text-2xl font-playfair font-bold text-gray-800">📚 Your Learning Library</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <UnifiedHeader breadcrumbs={breadcrumbs} />
 
       {/* Header */}
       <motion.div
