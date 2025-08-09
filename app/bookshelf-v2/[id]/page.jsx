@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { supabase } from '../../../utils/supabaseClient';
 import SocraticChat from '../../../components/SocraticChat';
-import MindMapDisplay from '../../../components/MindMapDisplay';
+import MindMapViewer from '../../../components/MindMapViewer';
+import UnifiedHeader from '../../../components/UnifiedHeader';
 
 export default function BookshelfPage() {
   const { id: bookId } = useParams();
@@ -62,6 +63,14 @@ export default function BookshelfPage() {
   };
 
   const saveNotes = async () => {
+    // Debug logging
+    console.log('Saving notes with:', {
+      book_id: bookId,
+      themes,
+      quotes,
+      takeaways,
+    });
+
     const { error } = await supabase.from('notes').insert([
       {
         book_id: bookId,
@@ -72,9 +81,14 @@ export default function BookshelfPage() {
     ]);
 
     if (error) {
+      console.error('Supabase error:', error);
       alert('Error saving notes: ' + error.message);
     } else {
       alert('Notes saved successfully!');
+      // Clear the form after successful save
+      setThemes('');
+      setQuotes('');
+      setTakeaways('');
     }
   };
 
@@ -122,122 +136,74 @@ export default function BookshelfPage() {
     );
   }
 
+  const breadcrumbs = [
+    { label: 'My Library', href: '/books' },
+    { label: book?.title || 'Loading...', href: null }
+  ];
+
   return (
     <div id="bookshelf" style={{ 
       minHeight: '100vh',
-      backgroundColor: '#ffffff', 
-      padding: '48px 24px',
-      maxWidth: '1200px', 
-      margin: '0 auto',
-      position: 'relative'
+      backgroundColor: '#ffffff'
     }}>
-      {/* Navigation Header */}
+      <UnifiedHeader breadcrumbs={breadcrumbs} />
+      
       <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '32px',
-        paddingBottom: '16px',
-        borderBottom: '1px solid #e5e7eb'
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '48px 24px',
+        position: 'relative'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button
-            onClick={() => window.location.href = '/'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'linear-gradient(135deg, #2349b4 0%, #1a3798 100%)',
-              color: 'white',
-              padding: '8px 16px',
-              borderRadius: '12px',
-              border: 'none',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(35, 73, 180, 0.2)',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseOver={(e) => e.target.style.transform = 'translateY(-1px)'}
-            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-          >
-            <span>🏠</span>
-            <span>Home</span>
-          </button>
-          <button
-            onClick={() => window.location.href = '/books'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              background: 'rgba(35, 73, 180, 0.1)',
-              color: '#2349b4',
-              padding: '8px 16px',
-              borderRadius: '12px',
-              border: '1px solid rgba(35, 73, 180, 0.2)',
-              fontSize: '14px',
-              fontWeight: '500',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.background = 'rgba(35, 73, 180, 0.15)';
-              e.target.style.transform = 'translateY(-1px)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.background = 'rgba(35, 73, 180, 0.1)';
-              e.target.style.transform = 'translateY(0)';
-            }}
-          >
-            <span>📚</span>
-            <span>Library</span>
-          </button>
-        </div>
-
         {/* Help Button - only show if guidance is dismissed */}
         {!showGuidance && (
-          <button
-            onClick={showGuidanceAgain}
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-              color: 'white',
-              border: 'none',
-              fontSize: '16px',
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
-              transition: 'all 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            onMouseOver={(e) => {
-              e.target.style.transform = 'scale(1.1)';
-              e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.4)';
-            }}
-            onMouseOut={(e) => {
-              e.target.style.transform = 'scale(1)';
-              e.target.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.3)';
-            }}
-            title="Show help guide"
-          >
-            ?
-          </button>
+          <div style={{
+            position: 'absolute',
+            top: '24px',
+            right: '24px',
+            zIndex: 10
+          }}>
+            <button
+              onClick={showGuidanceAgain}
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                color: 'white',
+                border: 'none',
+                fontSize: '16px',
+                cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(16, 185, 129, 0.3)',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onMouseOver={(e) => {
+                e.target.style.transform = 'scale(1.1)';
+                e.target.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.4)';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.transform = 'scale(1)';
+                e.target.style.boxShadow = '0 2px 8px rgba(16, 185, 129, 0.3)';
+              }}
+              title="Show help guide"
+            >
+              ?
+            </button>
+          </div>
         )}
-      </div>
 
-      <h1 className="font-playfair" style={{ fontSize: '32px', color: '#1d2233', marginBottom: '8px', fontWeight: '700' }}>
-        {book.title}
-      </h1>
-      <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '32px' }}>
-        by {book.author}
-      </p>
+        <h1 className="font-playfair" style={{ fontSize: '32px', color: '#1d2233', marginBottom: '8px', fontWeight: '700' }}>
+          {book.title}
+        </h1>
+        <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '32px' }}>
+          by {book.author}
+        </p>
 
-      {/* User Guidance */}
-      {showGuidance && (
-        <div style={{ 
+        {/* User Guidance */}
+        {showGuidance && (
+          <div style={{ 
           marginBottom: '24px', 
           padding: '18px', 
           background: 'linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%)', 
@@ -293,11 +259,11 @@ export default function BookshelfPage() {
           <p style={{ fontSize: '14px', color: '#4b5563', margin: 0, lineHeight: '1.5' }}>
             <strong style={{ color: '#374151' }}>Manual Mode:</strong> Fill out the forms below to create your own custom mind map step by step.
           </p>
-        </div>
-      )}
+          </div>
+        )}
 
-      {/* AI Mode Toggle */}
-      <div style={{ marginBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '6px' }}>
+        {/* AI Mode Toggle */}
+        <div style={{ marginBottom: '32px', display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '6px' }}>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button 
             onClick={() => setMode('socratic')} 
@@ -371,10 +337,10 @@ export default function BookshelfPage() {
             🛠️ Manual Mode
           </button>
         </div>
-        <p style={{ fontSize: '12px', color: '#999' }}>Choose your preferred method to create mind maps</p>
-      </div>
+          <p style={{ fontSize: '12px', color: '#999' }}>Choose your preferred method to create mind maps</p>
+        </div>
 
-      {mode === 'socratic' ? <SocraticChat bookId={bookId} book={book} setMindmapMarkdown={setMindmapMarkdown} /> : (
+        {mode === 'socratic' ? <SocraticChat bookId={bookId} book={book} setMindmapMarkdown={setMindmapMarkdown} /> : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div>
             <label htmlFor="themes" style={{ fontWeight: 'bold', fontSize: '14px' }}>Themes</label><br />
@@ -433,16 +399,17 @@ export default function BookshelfPage() {
           >
             Save & Generate Map ✨
           </button>
-        </div>
-      )}
+          </div>
+        )}
 
-      {mindmapMarkdown && (
-        <MindMapDisplay 
-          markdownContent={mindmapMarkdown} 
-          bookId={bookId}
-          onMarkdownChange={setMindmapMarkdown}
-        />
-      )}
+        {mindmapMarkdown && (
+          <MindMapViewer 
+            markdown={mindmapMarkdown}
+            bookId={bookId}
+            onMarkdownChange={setMindmapMarkdown}
+          />
+        )}
+      </div>
     </div>
   );
 }

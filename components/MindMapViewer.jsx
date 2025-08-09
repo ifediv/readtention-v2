@@ -11,6 +11,8 @@ export default function MindMapViewer({ markdown, onBranchAdd, bookId, onMarkdow
   const [editableMarkdown, setEditableMarkdown] = useState(markdown || '');
   const [saveStatus, setSaveStatus] = useState('saved'); // 'saved', 'saving', 'unsaved'
   const [lastSaved, setLastSaved] = useState(null);
+  
+  console.log('MindMapViewer mounted with bookId:', bookId, 'markdown length:', markdown?.length);
 
   // Update editable markdown when prop changes
   useEffect(() => {
@@ -29,6 +31,12 @@ export default function MindMapViewer({ markdown, onBranchAdd, bookId, onMarkdow
   }, [editableMarkdown, isEditing, markdown]);
 
   const handleSave = async () => {
+    console.log('handleSave called with:', {
+      bookId,
+      hasContent: !!editableMarkdown?.trim(),
+      contentLength: editableMarkdown?.length
+    });
+    
     if (!bookId || !editableMarkdown.trim()) return;
     
     setSaveStatus('saving');
@@ -70,10 +78,12 @@ export default function MindMapViewer({ markdown, onBranchAdd, bookId, onMarkdow
           }]);
 
         if (insertError) throw insertError;
+        console.log('Mindmap created successfully');
       }
 
       setSaveStatus('saved');
       setLastSaved(new Date());
+      console.log('Save completed successfully');
       
       // Update parent component
       if (onMarkdownChange) {
@@ -105,6 +115,17 @@ export default function MindMapViewer({ markdown, onBranchAdd, bookId, onMarkdow
     setEditableMarkdown(newMarkdown);
     setSaveStatus('unsaved');
   };
+  
+  // Save when receiving initial markdown content
+  useEffect(() => {
+    if (markdown && bookId && !lastSaved) {
+      console.log('Initial mindmap content detected, saving...');
+      // Wait a bit to ensure component is fully mounted
+      setTimeout(() => {
+        handleSave();
+      }, 1000);
+    }
+  }, [markdown, bookId]);
 
   useEffect(() => {
     if (!editableMarkdown || !svgRef.current || isEditing) return;
@@ -120,6 +141,28 @@ export default function MindMapViewer({ markdown, onBranchAdd, bookId, onMarkdow
 
         // Clear previous content
         svgRef.current.innerHTML = '';
+
+        // Add CSS styles for connecting lines
+        const style = document.createElement('style');
+        style.textContent = `
+          .markmap-link {
+            fill: none;
+            stroke: #999;
+            stroke-width: 1.5px;
+          }
+          .markmap-node {
+            cursor: pointer;
+          }
+          .markmap-node-circle {
+            fill: #fff;
+            stroke-width: 1.5px;
+          }
+          .markmap-node-text {
+            fill: #000;
+            font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          }
+        `;
+        document.head.appendChild(style);
 
         // Create markmap instance
         const mm = Markmap.create(svgRef.current, {
